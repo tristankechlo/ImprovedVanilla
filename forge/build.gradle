@@ -1,7 +1,14 @@
 plugins {
     id 'multiloader-loader'
     id 'net.minecraftforge.gradle' version '[6.0.36,6.2)'
+    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
+
+mixin {
+    add(sourceSets.main, "${mod_id}.refmap.json")
+    config("${mod_id}.mixins.json")
+}
+jar.manifest.attributes.put("MixinConfigs", "${mod_id}.mixins.json")
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
@@ -43,6 +50,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.7'
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
     compileOnly group: 'com.google.auto.service', name: 'auto-service', version: auto_service_version
     annotationProcessor group: 'com.google.auto.service', name: 'auto-service', version: auto_service_version
