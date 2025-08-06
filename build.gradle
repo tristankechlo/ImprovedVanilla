@@ -1,3 +1,4 @@
 plugins {
-    id 'net.neoforged.moddev' version '2.0.73' apply false
+    // https://projects.neoforged.net/neoforged/moddevgradle
+    id 'net.neoforged.moddev' version '2.0.106' apply false
 }
