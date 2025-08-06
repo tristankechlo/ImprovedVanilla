@@ -8,7 +8,6 @@ import com.tristankechlo.improvedvanilla.eventhandler.MobDropHandler;
 import com.tristankechlo.improvedvanilla.eventhandler.SpawnerHandler;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -21,16 +20,16 @@ public class ForgeImprovedVanilla {
 
     public ForgeImprovedVanilla() {
         // register event listeners
-        MinecraftForge.EVENT_BUS.addListener(this::cropRightClicking);
-        MinecraftForge.EVENT_BUS.addListener(this::easyPlanting);
-        MinecraftForge.EVENT_BUS.addListener(this::mobDropHandler);
-        MinecraftForge.EVENT_BUS.addListener(this::onSpawnerBroken);
+        PlayerInteractEvent.RightClickBlock.BUS.addListener(this::cropRightClicking);
+        PlayerInteractEvent.RightClickBlock.BUS.addListener(this::easyPlanting);
+        LivingDropsEvent.BUS.addListener(this::mobDropHandler);
+        BlockEvent.BreakEvent.BUS.addListener(this::onSpawnerBroken);
 
         // register commands
-        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
+        RegisterCommandsEvent.BUS.addListener(this::registerCommands);
 
         // setup configs
-        MinecraftForge.EVENT_BUS.addListener(this::commonSetup);
+        ServerAboutToStartEvent.BUS.addListener(this::commonSetup);
     }
 
     // setup configs
@@ -46,17 +45,13 @@ public class ForgeImprovedVanilla {
     // right click crops to harvest
     private void cropRightClicking(final PlayerInteractEvent.RightClickBlock event) {
         InteractionResult result = CropRightClickHandler.onPlayerRightClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec());
-        if (result == InteractionResult.SUCCESS) {
-            event.setCanceled(true);
-        }
+        event.setCancellationResult(result);
     }
 
     // easy planting
     private void easyPlanting(final PlayerInteractEvent.RightClickBlock event) {
         InteractionResult result = EasyPlantingHandler.onPlayerRightClickBlock(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec());
-        if (result == InteractionResult.SUCCESS) {
-            event.setCanceled(true);
-        }
+        event.setCancellationResult(result);
     }
 
     // drop spawn egg on entity death

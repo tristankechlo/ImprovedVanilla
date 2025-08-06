@@ -6,10 +6,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueOutput;
 
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ public final class SpawnerHandler {
         if (level.isClientSide() || targetBlock != Blocks.SPAWNER) {
             return;
         }
-        if (!(player.getMainHandItem().getItem() instanceof PickaxeItem)) {
+        if (!player.getMainHandItem().is(ItemTags.PICKAXES)) {
             return;
         }
         if (player.isCreative() || player.isSpectator()) {
@@ -80,13 +82,14 @@ public final class SpawnerHandler {
 
         // load the state of the spawner into this nbt
         BaseSpawner logic = ((SpawnerBlockEntity) tile).getSpawner();
-        CompoundTag nbt = new CompoundTag();
-        nbt = logic.save(nbt);
+        TagValueOutput valueOutput = TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING);
+        logic.save(valueOutput);
+        CompoundTag nbt = valueOutput.buildResult();
 
         // get the displayed entity
         if (nbt.contains("SpawnData")) {
-            SpawnData spawnData = new SpawnData(nbt.getCompound("SpawnData").getCompound("entity"), Optional.empty(), Optional.empty());
-            String id = spawnData.entityToSpawn().getString("id"); // should be the id of the entity
+            SpawnData spawnData = new SpawnData(nbt.getCompoundOrEmpty("SpawnData").getCompoundOrEmpty("entity"), Optional.empty(), Optional.empty());
+            String id = spawnData.entityToSpawn().getStringOr("id", ""); // should be the id of the entity
             if (id.isEmpty()) {
                 return ItemStack.EMPTY;
             }

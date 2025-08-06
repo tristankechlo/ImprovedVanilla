@@ -8,6 +8,9 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public final class ResponseHelper {
 
     public static void sendMessageConfigReload(CommandSourceStack source, boolean success) {
@@ -31,10 +34,11 @@ public final class ResponseHelper {
         source.sendSuccess(() -> start, broadcastToOps);
     }
 
-    public static MutableComponent clickableLink(String url, String displayText) {
+    public static MutableComponent clickableLink(String url, String displayText) throws URISyntaxException {
         MutableComponent mutableComponent = Component.literal(displayText);
         mutableComponent.withStyle(ChatFormatting.GREEN, ChatFormatting.UNDERLINE);
-        mutableComponent.withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url)));
+        URI parsedUrl = new URI(url);
+        mutableComponent.withStyle(style -> style.withClickEvent(new ClickEvent.OpenUrl(parsedUrl)));
         return mutableComponent;
     }
 
