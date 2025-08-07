@@ -1,8 +1,6 @@
 {
 	"pack": {
 		"description": "Improved Vanilla",
-        "pack_format": 42,
-        "forge:resource_pack_format": 42,
-        "forge:data_pack_format": 57
+        "pack_format": 80
 	}
 }
