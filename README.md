@@ -32,5 +32,4 @@
 ![GildedBlackstone](https://i.ibb.co/Zh3NSZk/gilded-blackstone.png)
 ![GlowInkSac](https://i.ibb.co/nRv9g1m/glow-ink-sac.png)
 ![GlowLichen](https://i.ibb.co/BVhrdS4/gold-lichen.png)
-![Saddle](https://i.ibb.co/gV3VwQd/saddle.png)
 ![String](https://i.ibb.co/ynyqQJT/wool.gif)

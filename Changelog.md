@@ -3,6 +3,7 @@
 ### Version 1.21.6 - 1.8.0
 
 - port to 1.21.6
+- removing recipe for the saddle, as there is a vanilla recipe now
 
 ### Version 1.21.4 - 1.8.0
 
